@@ -1,0 +1,10 @@
+Metadata-Version: 1.0
+Name: rqt_joint_trajectory_controller
+Version: 0.9.3
+Summary: Graphical frontend for interacting with joint_trajectory_controller instances.
+Home-page: http://wiki.ros.org/rqt_joint_trajectory_controller
+Author: Adolfo Rodriguez Tsouroukdissian
+Author-email: adolfo.rodriguez@pal-robotics.com
+License: Modified BSD
+Description: UNKNOWN
+Platform: UNKNOWN

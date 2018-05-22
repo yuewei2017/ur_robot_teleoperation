@@ -1,0 +1,8 @@
+prefix=/home/dong/Project/robot_test/install
+
+Name: cartesian_state_msgs
+Description: Description of cartesian_state_msgs
+Version: 0.0.0
+Cflags: -I/home/dong/Project/robot_test/install/include
+Libs: -L/home/dong/Project/robot_test/install/lib 
+Requires: geometry_msgs message_runtime

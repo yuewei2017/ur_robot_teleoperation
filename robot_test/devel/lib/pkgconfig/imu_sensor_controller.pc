@@ -1,0 +1,8 @@
+prefix=/home/dong/Project/robot_test/devel
+
+Name: imu_sensor_controller
+Description: Description of imu_sensor_controller
+Version: 0.9.3
+Cflags: -I/home/dong/Project/robot_test/src/ros_controllers/imu_sensor_controller/include
+Libs: -L/home/dong/Project/robot_test/devel/lib -limu_sensor_controller
+Requires: controller_interface hardware_interface sensor_msgs realtime_tools

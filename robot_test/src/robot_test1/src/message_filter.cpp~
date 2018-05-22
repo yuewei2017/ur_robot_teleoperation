@@ -1,0 +1,58 @@
+//#include <ros/ros.h>
+#include <message_filters/subscriber.h>
+#include <message_filters/time_synchronizer.h>
+#include <message_filters/sync_policies/approximate_time.h>
+#include <geometry_msgs/Vector3Stamped.h>
+
+using namespace message_filters;
+using namespace geometry_msgs;
+
+ros::Publisher position_pub;
+
+void callback(const geometry_msgs::Vector3StampedConstPtr& msg1, const geometry_msgs::Vector3StampedConstPtr& msg2)
+{
+    geometry_msgs::Vector3Stamped pos;
+    pos.header.frame_id = ros::this_node::getName();
+    pos.header.stamp = ros::Time::now();
+    boost::array<double,3> pos1,pos2,pos3,force1;	
+    pos1[0]=msg1->vector.x;
+    pos1[1]=msg1->vector.y;
+    pos1[2]=msg1->vector.z;
+    pos3[0]=-pos1[2]/5;
+    pos3[1]=-pos1[0]/5;
+    pos3[2]=pos1[1]/5;
+    force1[0]=msg2->vector.x;
+    force1[1]=msg2->vector.y;
+    force1[2]=msg2->vector.z;
+    pos2[0]=force1[0]/500;
+    pos2[1]=-force1[1]/500;
+    pos2[2]=-force1[2]/500;
+    //pos.vector.x=pos3[0]+pos2[0];
+    //pos.vector.y=pos3[1]+pos2[1];
+    //pos.vector.z=pos3[2]+pos2[2];
+    pos.vector.x=pos3[0];
+    pos.vector.y=pos3[1];
+    pos.vector.z=pos3[2];
+    position_pub.publish(pos);
+ }
+
+int main(int argc, char** argv)
+{
+
+  ros::init(argc, argv, "message_filter");
+
+  ros::NodeHandle nh;
+  message_filters::Subscriber<geometry_msgs::Vector3Stamped> sub1(nh, "/falcon/velocity", 1);
+  message_filters::Subscriber<geometry_msgs::Vector3Stamped> sub2(nh, "/falcon/force_a", 1);
+
+  position_pub = nh.advertise<geometry_msgs::Vector3Stamped>("/falconPos", 10);
+
+typedef sync_policies::ApproximateTime<Vector3Stamped,Vector3Stamped> MySyncPolicy;
+
+  Synchronizer<MySyncPolicy> sync(MySyncPolicy(10), sub1, sub2);
+  //Synchronizer<Vector3Stamped, Vector3Stamped> sync(sub1, sub2, 10);
+  sync.registerCallback(boost::bind(&callback,_1,_2));
+  ros::spin();
+
+  return 0;
+}

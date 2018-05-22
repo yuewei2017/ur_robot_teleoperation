@@ -1,0 +1,8 @@
+prefix=/home/dong/Project/master/install
+
+Name: ur3_moveit_config
+Description: Description of ur3_moveit_config
+Version: 1.1.6
+Cflags: 
+Libs: -L/home/dong/Project/master/install/lib 
+Requires: 

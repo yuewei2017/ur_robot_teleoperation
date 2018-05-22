@@ -1,0 +1,8 @@
+prefix=/home/dong/Project/master/install
+
+Name: ur_driver
+Description: Description of ur_driver
+Version: 1.1.6
+Cflags: -I/home/dong/Project/master/install/include
+Libs: -L/home/dong/Project/master/install/lib 
+Requires: dynamic_reconfigure

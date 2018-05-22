@@ -1,0 +1,8 @@
+prefix=/home/dong/Project/master/install
+
+Name: ur_msgs
+Description: Description of ur_msgs
+Version: 1.1.6
+Cflags: -I/home/dong/Project/master/install/include
+Libs: -L/home/dong/Project/master/install/lib 
+Requires: message_runtime std_msgs

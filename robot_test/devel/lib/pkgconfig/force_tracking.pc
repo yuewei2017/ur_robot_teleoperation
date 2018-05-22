@@ -1,0 +1,8 @@
+prefix=/home/dong/Project/robot_test/devel
+
+Name: force_tracking
+Description: Description of force_tracking
+Version: 0.0.0
+Cflags: -I/home/dong/Project/robot_test/src/force_tracking/include
+Libs: -L/home/dong/Project/robot_test/devel/lib 
+Requires: 

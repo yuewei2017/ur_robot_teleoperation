@@ -1,0 +1,8 @@
+prefix=/home/dong/Project/master/install
+
+Name: hector_geotiff
+Description: Description of hector_geotiff
+Version: 0.3.5
+Cflags: -I/home/dong/Project/master/install/include -I/usr/include/eigen3
+Libs: -L/home/dong/Project/master/install/lib -lgeotiff_writer -l:/usr/lib/x86_64-linux-gnu/libQtGui.so -l:/usr/lib/x86_64-linux-gnu/libQtCore.so
+Requires: hector_map_tools hector_nav_msgs nav_msgs pluginlib roscpp std_msgs

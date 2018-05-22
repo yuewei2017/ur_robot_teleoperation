@@ -1,0 +1,8 @@
+prefix=/home/dong/Project/robot_test/install
+
+Name: ur5_cartesian_velocity_control
+Description: Description of ur5_cartesian_velocity_control
+Version: 0.0.1
+Cflags: -I/home/dong/Project/robot_test/install/include
+Libs: -L/home/dong/Project/robot_test/install/lib -lur5_cartesian_velocity_control
+Requires: cartesian_state_msgs

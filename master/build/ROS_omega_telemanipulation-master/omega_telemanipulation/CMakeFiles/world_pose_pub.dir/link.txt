@@ -1,0 +1,1 @@
+/usr/bin/c++   -std=c++11    CMakeFiles/world_pose_pub.dir/src/listener.cpp.o  -o /home/dong/Project/master/devel/lib/omega_telemanipulation/world_pose_pub  -L/home/dong/Project/master/src/ROS_omega_telemanipulation-master/omega_telemanipulation/libraries -rdynamic 

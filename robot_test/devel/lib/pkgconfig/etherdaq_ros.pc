@@ -1,0 +1,8 @@
+prefix=/home/dong/Project/robot_test/devel
+
+Name: etherdaq_ros
+Description: Description of etherdaq_ros
+Version: 1.0.0
+Cflags: -I/home/dong/Project/robot_test/src/etherdaq_ros-master/include
+Libs: -L/home/dong/Project/robot_test/devel/lib -letherdaq_ros
+Requires: diagnostic_msgs diagnostic_updater geometry_msgs roscpp

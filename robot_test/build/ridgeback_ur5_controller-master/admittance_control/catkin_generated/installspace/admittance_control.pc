@@ -1,0 +1,8 @@
+prefix=/home/dong/Project/robot_test/install
+
+Name: admittance_control
+Description: Description of admittance_control
+Version: 0.0.0
+Cflags: -I/home/dong/Project/robot_test/install/include
+Libs: -L/home/dong/Project/robot_test/install/lib 
+Requires: cartesian_state_msgs

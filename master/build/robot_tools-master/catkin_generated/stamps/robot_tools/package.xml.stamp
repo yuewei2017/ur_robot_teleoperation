@@ -1,0 +1,43 @@
+<package>
+  <name>robot_tools</name>
+  <version>1.0.1</version>
+  <description>Contains minimalistic tools each of which only does one
+    thing and can be universally used by anybody.
+    Tools that are short and can be contained within few
+    files are welcome.
+
+    Big complex tools do not belong here.
+    Once the tool is too big, move it somewhere else.
+
+    Tools with non-standard dependencies do not belong here.</description>
+  <maintainer email="mmedvede@cs.uml.edu">Mikhail Medvedev</maintainer>
+
+  <license>BSD</license>
+
+  <url type="website">http://ros.org/wiki/robot_tools</url>
+  <!-- <url type="bugtracker"></url> -->
+
+  <author>Mikhail Medvedev</author>
+
+  <!-- Dependencies which this package needs to build itself. -->
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <!-- Dependencies needed to compile this package. -->
+  <build_depend>roscpp</build_depend>
+  <build_depend>std_msgs</build_depend>
+  <build_depend>geometry_msgs</build_depend>
+  <build_depend>tf</build_depend>
+
+  <!-- Dependencies needed after this package is compiled. -->
+  <run_depend>roscpp</run_depend>
+  <run_depend>std_msgs</run_depend>
+  <run_depend>geometry_msgs</run_depend>
+  <run_depend>tf</run_depend>
+
+  <!-- Dependencies needed only for running tests. -->
+  <!-- <test_depend>roscpp</test_depend> -->
+  <!-- <test_depend>std_msgs</test_depend> -->
+  <!-- <test_depend>geometry_msgs</test_depend> -->
+  <!-- <test_depend>tf</test_depend> -->
+
+</package>

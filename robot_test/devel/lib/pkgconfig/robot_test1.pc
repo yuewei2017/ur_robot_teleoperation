@@ -1,0 +1,8 @@
+prefix=/home/dong/Project/robot_test/devel
+
+Name: robot_test1
+Description: Description of robot_test1
+Version: 0.0.0
+Cflags: -I/home/dong/Project/robot_test/devel/include
+Libs: -L/home/dong/Project/robot_test/devel/lib 
+Requires: actionlib geometry_msgs kdl roscpp trac_ik_lib trajectory_msgs message_runtime message_filters

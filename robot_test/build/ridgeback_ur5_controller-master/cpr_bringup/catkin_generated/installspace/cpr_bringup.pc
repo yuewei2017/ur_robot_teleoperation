@@ -1,0 +1,8 @@
+prefix=/home/dong/Project/robot_test/install
+
+Name: cpr_bringup
+Description: Description of cpr_bringup
+Version: 0.0.0
+Cflags: 
+Libs: -L/home/dong/Project/robot_test/install/lib 
+Requires: 

@@ -1,0 +1,8 @@
+prefix=/home/dong/Project/robot_test/devel
+
+Name: ur_driver
+Description: Description of ur_driver
+Version: 1.1.6
+Cflags: -I/home/dong/Project/robot_test/devel/include
+Libs: -L/home/dong/Project/robot_test/devel/lib 
+Requires: dynamic_reconfigure

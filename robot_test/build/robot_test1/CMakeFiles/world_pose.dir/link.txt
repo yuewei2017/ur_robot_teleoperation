@@ -1,0 +1,1 @@
+/usr/bin/c++    -std=c++11 -O3 -DNDEBUG    CMakeFiles/world_pose.dir/src/world_pose.cpp.o  -o /home/dong/Project/robot_test/devel/lib/robot_test1/world_pose -rdynamic 

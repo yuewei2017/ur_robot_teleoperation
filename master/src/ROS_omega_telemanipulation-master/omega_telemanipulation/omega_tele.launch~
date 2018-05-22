@@ -1,0 +1,7 @@
+<launch>
+   <node pkg="omega_telemanipulation" type="haptic_ros_driver" name="haptic_ros_driver"/>
+   <node pkg="omega_telemanipulation" type="world_pose" name="world_pose"/>
+   <node pkg="omega_telemanipulation" type="message_filter_pose" name="message_filter_pose"/>
+</launch>
+
+

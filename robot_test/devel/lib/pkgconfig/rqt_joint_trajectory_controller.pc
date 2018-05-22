@@ -1,0 +1,8 @@
+prefix=/home/dong/Project/robot_test/devel
+
+Name: rqt_joint_trajectory_controller
+Description: Description of rqt_joint_trajectory_controller
+Version: 0.9.3
+Cflags: 
+Libs: -L/home/dong/Project/robot_test/devel/lib 
+Requires: 

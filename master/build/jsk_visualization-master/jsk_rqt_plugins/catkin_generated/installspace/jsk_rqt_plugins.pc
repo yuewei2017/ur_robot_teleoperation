@@ -1,0 +1,8 @@
+prefix=/home/dong/Project/master/install
+
+Name: jsk_rqt_plugins
+Description: Description of jsk_rqt_plugins
+Version: 2.1.1
+Cflags: -I/home/dong/Project/master/install/include
+Libs: -L/home/dong/Project/master/install/lib 
+Requires: message_runtime

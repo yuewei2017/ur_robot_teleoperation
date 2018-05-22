@@ -1,0 +1,4 @@
+<launch>
+	<include file="$(find ati_wnet_ft)/launch/ft.launch" />
+	<node name="rqt_plot" pkg="rqt_plot" type="rqt_plot" args="/ati_ft_data/force/x:y:z /ati_ft_data/torque/x:y:z" />
+</launch>

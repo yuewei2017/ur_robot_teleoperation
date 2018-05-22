@@ -1,0 +1,8 @@
+prefix=/home/dong/Project/robot_test/devel
+
+Name: forward_command_controller
+Description: Description of forward_command_controller
+Version: 0.9.3
+Cflags: -I/home/dong/Project/robot_test/src/ros_controllers/forward_command_controller/include
+Libs: -L/home/dong/Project/robot_test/devel/lib 
+Requires: controller_interface hardware_interface std_msgs realtime_tools

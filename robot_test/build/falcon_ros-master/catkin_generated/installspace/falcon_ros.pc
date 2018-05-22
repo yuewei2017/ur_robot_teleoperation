@@ -1,0 +1,8 @@
+prefix=/home/dong/Project/robot_test/install
+
+Name: falcon_ros
+Description: Description of falcon_ros
+Version: 0.0.0
+Cflags: -I/home/dong/Project/robot_test/install/include
+Libs: -L/home/dong/Project/robot_test/install/lib 
+Requires: geometry_msgs roscpp rospy std_msgs

@@ -1,0 +1,8 @@
+prefix=/home/dong/Project/robot_test/install
+
+Name: optoforce_etherdaq_driver
+Description: Description of optoforce_etherdaq_driver
+Version: 1.0.0
+Cflags: -I/home/dong/Project/robot_test/install/include
+Libs: -L/home/dong/Project/robot_test/install/lib -letherdaq_driver
+Requires: diagnostic_msgs diagnostic_updater geometry_msgs roscpp

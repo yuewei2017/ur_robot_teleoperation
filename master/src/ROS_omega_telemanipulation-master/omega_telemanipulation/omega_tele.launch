@@ -1,0 +1,10 @@
+<launch>
+   <node pkg="omega_telemanipulation" type="haptic_ros_driver" name="haptic_ros_driver"/>
+   <node pkg="omega_telemanipulation" type="world_pose" name="world_pose"/>
+   <node pkg="omega_telemanipulation" type="message_filter_pose" name="message_filter_pose"/>
+   <node pkg="robot_tools" type="pose_publisher" name="pose_publisher"/>
+   <node pkg="robot_tools" type="recorder_launch.sh" name="pose_recorder"/>
+
+</launch>
+
+

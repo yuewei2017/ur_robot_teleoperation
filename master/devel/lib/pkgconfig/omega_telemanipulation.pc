@@ -1,0 +1,8 @@
+prefix=/home/dong/Project/master/devel
+
+Name: omega_telemanipulation
+Description: Description of omega_telemanipulation
+Version: 0.0.0
+Cflags: 
+Libs: -L/home/dong/Project/master/devel/lib 
+Requires: geometry_msgs message_runtime message_filters

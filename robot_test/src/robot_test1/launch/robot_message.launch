@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<launch>
+  <node name="force_pub" pkg="robot_test1" type="force_pub" />
+  <node name="ur_control_demo" pkg="robot_test1" type="ur_control_demo" />
+  <node name="message_filter" pkg="robot_test1" type="message_filter" />
+</launch>

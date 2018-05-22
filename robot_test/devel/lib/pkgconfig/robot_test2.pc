@@ -1,0 +1,8 @@
+prefix=/home/dong/Project/robot_test/devel
+
+Name: robot_test2
+Description: Description of robot_test2
+Version: 0.0.0
+Cflags: 
+Libs: -L/home/dong/Project/robot_test/devel/lib 
+Requires: 

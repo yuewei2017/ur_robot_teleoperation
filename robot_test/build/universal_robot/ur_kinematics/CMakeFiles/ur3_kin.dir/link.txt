@@ -1,0 +1,1 @@
+/usr/bin/c++  -fPIC -O3 -DNDEBUG   -shared -Wl,-soname,libur3_kin.so -o /home/dong/Project/robot_test/devel/lib/libur3_kin.so CMakeFiles/ur3_kin.dir/src/ur_kin.cpp.o 

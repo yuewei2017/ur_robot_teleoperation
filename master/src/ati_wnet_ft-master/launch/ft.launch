@@ -1,0 +1,5 @@
+<launch>
+	<node name="ati_ft_reader" pkg="ati_wnet_ft" type="ati_ft_reader.sh" cwd="node" required="true" />
+	<node name="ati_ft_pub" pkg="ati_wnet_ft" type="ft_publisher.py" required="true" />
+        
+</launch>

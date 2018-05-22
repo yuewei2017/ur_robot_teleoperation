@@ -1,0 +1,22 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/dong/Project/master/src/haptic_ros_driver-master/src/HapticDevice.cpp
+haptic_ros_driver/HapticDevice.h
+/home/dong/Project/master/src/haptic_ros_driver-master/src/haptic_ros_driver/HapticDevice.h
+haptic_ros_driver/dhdc.h
+/home/dong/Project/master/src/haptic_ros_driver-master/src/haptic_ros_driver/dhdc.h
+std_msgs/Int8MultiArray.h
+/home/dong/Project/master/src/haptic_ros_driver-master/src/std_msgs/Int8MultiArray.h
+
+/home/dong/Project/master/src/haptic_ros_driver-master/src/haptic_ros_driver.cpp
+ros/ros.h
+/home/dong/Project/master/src/haptic_ros_driver-master/src/ros/ros.h
+haptic_ros_driver/HapticDevice.h
+/home/dong/Project/master/src/haptic_ros_driver-master/src/haptic_ros_driver/HapticDevice.h
+

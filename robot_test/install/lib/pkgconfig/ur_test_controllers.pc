@@ -1,0 +1,8 @@
+prefix=/home/dong/Project/robot_test/install
+
+Name: ur_test_controllers
+Description: Description of ur_test_controllers
+Version: 0.0.0
+Cflags: 
+Libs: -L/home/dong/Project/robot_test/install/lib 
+Requires: 

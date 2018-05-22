@@ -1,0 +1,8 @@
+prefix=/home/dong/Project/robot_test/install
+
+Name: velocity_controllers
+Description: Description of velocity_controllers
+Version: 0.9.3
+Cflags: -I/home/dong/Project/robot_test/install/include
+Libs: -L/home/dong/Project/robot_test/install/lib -lvelocity_controllers
+Requires: angles control_msgs control_toolbox controller_interface forward_command_controller realtime_tools urdf

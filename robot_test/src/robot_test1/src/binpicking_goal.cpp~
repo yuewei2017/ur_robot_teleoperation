@@ -1,0 +1,310 @@
+#include <iostream>
+#include <ros/ros.h>
+#include <control_msgs/FollowJointTrajectoryAction.h>
+#include <geometry_msgs/Pose.h>
+#include <sensor_msgs/JointState.h>
+#include <std_msgs/String.h>
+#include <ur_msgs/SetIO.h>
+#include <trac_ik/trac_ik.hpp>
+#include <kdl/chainfksolverpos_recursive.hpp>
+#include <actionlib/client/simple_action_client.h>
+#include <boost/thread.hpp>
+#include <tf/tf.h>
+#include <tf/transform_listener.h>
+
+#define TASK_POS_NUM	20
+#define TIMEOUT_NUM		100
+#define PI				3.1415926
+
+typedef actionlib::SimpleActionClient<control_msgs::FollowJointTrajectoryAction> Client;
+
+const std::string default_joint_name[6] = {"shoulder_pan_joint",
+										   "shoulder_lift_joint",
+										   "elbow_joint",
+										   "wrist_1_joint",
+										   "wrist_2_joint",
+										   "wrist_3_joint"};
+
+const std::string default_link_name[8] = {"base_link",
+										  "shoulder_link",
+										  "upper_arm_link",
+										  "forearm_link",
+										  "wrist_1_link",
+										  "wrist_2_link",
+										  "wrist_3_link",
+										  "ee_link"};
+const double time_fac_joint[6] = {1, 1, 2, 0.2, 1, 1};
+const double test1_pose[6] = {-0.15873, 0.0100, 0.095, -1.45906, PI/2, PI/2};
+const double test_pose[6] = {-0.17873, -0.0100, -0.005, -1.45906, PI/2, PI/2};
+//0:home位置； 1：精定位位置； 2:初始放置位置;
+double task_pose_arr[TASK_POS_NUM][6] = {{-0.30, -0.05, 0.20, 0, 1.57, 1.57},
+											   {-0.03, 0.35, 0.5, 1.57, -1.57, 1.57},
+											   {-0.32, -0.05, 0.012, 0, 1.57, 1.57},
+											   {0.000, 0.30, 0.20, 0, 1.57, 1.57},
+											   {-0.30, 0.00, 0.02, 0, 1.57, 1.57},
+											   {-0.2, 0.3, 0.05, 1.57, 1.57, 1.57},
+											   {-0.2, 0.3, 0.05, 1.57, 1.57, 1.57},
+											   {-0.2, 0.3, 0.05, 1.57, 1.57, 1.57},
+											   {-0.2, 0.3, 0.05, 1.57, 1.57, 1.57},
+											   {-0.2, 0.3, 0.05, 1.57, 1.57, 1.57},
+											   {-0.2, 0.3, 0.05, 1.57, 1.57, 1.57},
+											   {-0.2, 0.3, 0.05, 1.57, 1.57, 1.57},
+											   {-0.2, 0.3, 0.05, 1.57, 1.57, 1.57},
+											   {-0.2, 0.3, 0.05, 1.57, 1.57, 1.57},
+											   {-0.2, 0.3, 0.05, 1.57, 1.57, 1.57},
+											   {-0.2, 0.3, 0.05, 1.57, 1.57, 1.57},
+											   {-0.2, 0.3, 0.05, 1.57, 1.57, 1.57},
+											   {-0.2, 0.3, 0.05, 1.57, 1.57, 1.57},
+											   {-0.2, 0.3, 0.05, 1.57, 1.57, 1.57},
+											   {-0.2, 0.3, 0.05, 1.57, 1.57, 1.57}};
+
+const double hand_eye_calibration[7] = {-0.0114659545764, 0.390178738773,0.775867719707,
+									   0.722199530309, -0.691113559387, -0.0210497807854, 0.0186223838836};
+
+class ur_control_demo
+{
+	protected:
+		std::string ur_name;
+		std::string ur_jointname[6];
+		std::string ur_linkname[8];
+		std::string topic_jointstate;
+
+		std::string server_urio;
+		std::string robot_description;
+		std::string ur_action_client_name;
+
+		KDL::Chain                              ur_chain;
+		KDL::ChainFkSolverPos_recursive         *kdl_fk_solver;
+		TRAC_IK::TRAC_IK                        *track_ik_solver;
+		
+		KDL::Frame								task_pose[TASK_POS_NUM];
+		KDL::Frame								tagert_pose;
+		KDL::Frame								access_tagertpose;
+
+		sensor_msgs::JointState                 cur_RobotJointStates;
+		sensor_msgs::JointState                 target_RobotJointStates;
+		
+		trajectory_msgs::JointTrajectoryPoint 	targetTra_robotJoint;
+		trajectory_msgs::JointTrajectoryPoint 	curTra_robotJoint;
+		control_msgs::FollowJointTrajectoryGoal mygoal;
+
+		ros::NodeHandle			*nh, n;
+		ros::Subscriber			ur_jointstate_sub;
+		
+		ros::ServiceClient 		callsrv;
+
+		Client					*client;
+		boost::thread			ros_manager_thread;
+		boost::mutex			cmd_mutex, joint_mutex;
+
+	public:
+		binpicking_ur(ros::NodeHandle _n):
+			n(_n),
+			ur_jointname(default_joint_name),
+			ur_linkname(default_link_name),
+			ur_name("ur3"),
+			topic_jointstate("/joint_states"),
+			server_urio("/ur_driver/set_io"),
+			robot_description("/robot_description"),
+			ur_action_client_name("/follow_joint_trajectory"),
+
+			ros_manager_thread(&binpicking_ur::ros_manager, this),
+		{
+			getROSparam();
+			for(int i=0;i<6;i++)
+			{
+				cur_RobotJointStates.name.push_back(ur_jointname[i]);
+				target_RobotJointStates.name.push_back(ur_jointname[i]);
+				mygoal.trajectory.joint_names.push_back(ur_jointname[i]);
+			}
+
+			for(int i=0;i<TASK_POS_NUM;i++)
+			{
+				task_pose[i].p = KDL::Vector(task_pose_arr[i][0], task_pose_arr[i][1], task_pose_arr[i][2]);
+				task_pose[i].M = KDL::Rotation::RPY(task_pose_arr[i][3], task_pose_arr[i][4], task_pose_arr[i][5]);
+			}
+
+			cur_RobotJointStates.position.resize(6);
+			curTra_robotJoint.positions.resize(6);
+			target_RobotJointStates.position.resize(6);
+			targetTra_robotJoint.positions.resize(6);
+			curTra_robotJoint.velocities.resize(6);
+			targetTra_robotJoint.velocities.resize(6);
+
+			client = new Client(ur_action_client_name, true);
+			ROS_INFO("waiting for server...");
+			bool state = client->waitForServer(ros::Duration(10));
+			if(state) ROS_INFO("connected the server.");
+			else {ROS_INFO("connect the server failed.");}
+
+			track_ik_solver = new TRAC_IK::TRAC_IK(ur_linkname[0], ur_linkname[7], robot_description);
+			track_ik_solver->getKDLChain(ur_chain);
+			track_ik_solver->SetSolveType(TRAC_IK::Distance);
+			kdl_fk_solver = new KDL::ChainFkSolverPos_recursive(ur_chain);
+
+			//ros_manager_thread.join();
+			usleep(100);
+			ROS_INFO("binpicking task is running");
+		}
+
+		~binpicking_ur(void)
+		{
+			delete track_ik_solver;
+			delete kdl_fk_solver;
+			delete client;
+		}
+
+		void jointstates_subCB(const sensor_msgs::JointState &_msg)
+		{
+			exctarget_id = atoi(_msg.header.frame_id.c_str());
+			if(exctarget_id<0) exctarget_id = 0;
+
+			joint_mutex.lock();
+			cur_RobotJointStates = _msg;
+			joint_mutex.unlock();
+		}
+
+		void set_homeposition(double *_homepos)
+		{
+			task_pose[0].p = KDL::Vector(_homepos[0], _homepos[1], _homepos[2]);
+			task_pose[0].M = KDL::Rotation::RPY(_homepos[3], _homepos[4], _homepos[5]);
+		}
+
+		void sendmygoal(void)
+		{
+			mygoal.trajectory.header.stamp = ros::Time::now();
+			client->sendGoal(mygoal);
+		}
+
+		int excTrack(void)
+		{
+			int status;
+			sendmygoal();
+			client->waitForResult(ros::Duration(0));
+
+			if(client->getState() != actionlib::SimpleClientGoalState::SUCCEEDED)
+			{
+				client->cancelGoal();
+				ROS_WARN("Robot Err, can't reach the goal.\n");
+				status = 0;
+			}
+			else
+			{
+				ROS_INFO("task complete.\n");
+				status = 1;
+			}
+
+			return status;
+		}
+		
+		bool insertTrac(KDL::Frame _insertPoint, float _tms)
+		{
+			if(_tm <= 0) {ROS_INFO("duration time should be positive.");return 0;}
+			KDL::JntArray cur_JointArray(6), target_JointArray;		
+			mygoal.trajectory.points.resize(2);
+			
+			curTra_robotJoint.time_from_start = ros::Duration(0);				
+			for(int i=0;i<6;i++)
+			{
+				curTra_robotJoint.positions[i] = cur_RobotJointStates.position[i];
+				curTra_robotJoint.velocities[i] = 0;
+			}
+			mygoal.trajectory.points[0] = curTra_robotJoint;
+			
+			for(int i=0;i<6;i++) cur_JointArray(i) = curTra_robotJoint.positions[i];
+			
+			int rc = track_ik_solver->CartToJnt(cur_JointArray, _insertPoint, target_JointArray);
+			if(rc <= 0)
+			{
+				ROS_INFO("insert the goal failed");
+				return false;
+			}
+			
+			for(int i=0;i<6;i++)
+			{
+				targetTra_robotJoint.positions[i] = target_JointArray(i);
+				targetTra_robotJoint.velocities[i] = 0.0;
+			}
+			
+			targetTra_robotJoint.time_from_start = ros::Duration(_tms);
+			mygoal.trajectory.points[inserttarget_num] = targetTra_robotJoint;
+			return true;
+		}
+
+		bool moveto(const KDL::Frame &_pose, float _tm)
+		{
+			int state = 0;
+			while(state==0 && ros::ok())
+			{
+				state = insertTrack(_pose, _tm);
+				if(state) {state = excTrack();}
+			}
+			return true;
+		}
+
+		bool robot2home(void)
+		{
+			while(!moveto(task_pose[0], 2.0) && ros::ok()) sleep(1);
+			return true;
+		}
+
+		void setURIO(unsigned char _pin, bool _state)
+		{
+			ur_msgs::SetIO setIO;
+			setIO.request.fun = 1;
+			setIO.request.pin = _pin;
+			setIO.request.state = _state;
+			if(callsrv.call(setIO))
+			{
+				//ROS_INFO("set IO %d:%.1f", setIO.request.pin, setIO.request.state);
+			}
+			else
+			{
+				ROS_INFO("set IO %d:%.1f,failed.", setIO.request.pin, setIO.request.state);
+			}
+		}
+
+		void ros_manager(void)
+		{
+			ROS_INFO("ros manager is running.");
+			ur_jointstate_sub = n.subscribe(topic_jointstate, 1, &ur_control_demo::jointstates_subCB, this);
+			callsrv = n.serviceClient<ur_msgs::SetIO>(server_urio);
+			ros::Rate r(100);
+			while(ros::ok())
+			{
+				r.sleep();
+				ros::spinOnce();
+			}
+			//ros::MultiThreadedSpinner spinner(3);
+			//spinner.spin();
+			//ros::spin();
+		}
+
+		void start_ur_demo(void)
+		{
+			while(ros::ok())
+			{
+				robot2home();
+				moveto(task_pose[1], 2.5);
+				ros::shutdown();
+				return;
+			}
+		}
+};
+
+int main(int argc, char **argv)
+{
+	ros::init(argc, argv, "ur_control_demo");
+	ros::NodeHandle n;
+
+	binpicking_ur binpicking_ur(n);
+	binpicking_ur.start_binpicking();
+
+	ROS_INFO("task complete.");
+	ros::shutdown();
+	return 0;
+}
+
+
+
+

@@ -1,0 +1,2 @@
+set(ur_msgs_MESSAGE_FILES "/home/dong/Project/master/src/universal_robot/ur_msgs/msg/Analog.msg;/home/dong/Project/master/src/universal_robot/ur_msgs/msg/Digital.msg;/home/dong/Project/master/src/universal_robot/ur_msgs/msg/IOStates.msg;/home/dong/Project/master/src/universal_robot/ur_msgs/msg/RobotStateRTMsg.msg;/home/dong/Project/master/src/universal_robot/ur_msgs/msg/MasterboardDataMsg.msg")
+set(ur_msgs_SERVICE_FILES "/home/dong/Project/master/src/universal_robot/ur_msgs/srv/SetPayload.srv;/home/dong/Project/master/src/universal_robot/ur_msgs/srv/SetIO.srv")

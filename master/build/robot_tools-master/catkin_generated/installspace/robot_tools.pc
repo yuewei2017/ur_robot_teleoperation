@@ -1,0 +1,8 @@
+prefix=/home/dong/Project/master/install
+
+Name: robot_tools
+Description: Description of robot_tools
+Version: 1.0.1
+Cflags: 
+Libs: -L/home/dong/Project/master/install/lib 
+Requires: roscpp std_msgs geometry_msgs tf

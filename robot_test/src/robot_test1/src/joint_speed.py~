@@ -1,0 +1,16 @@
+#!/usr/bin/env python
+import roslib; roslib.load_manifest('ur_driver')
+import rospy
+from trajectory_msgs.msg import JointTrajectory
+import time
+
+JOINT_NAMES = ['shoulder_pan_joint', 'shoulder_lift_joint', 'elbow_joint',
+               'wrist_1_joint', 'wrist_2_joint', 'wrist_3_joint']
+Q1 = [0.1,0.1,0.1,0.1,0.1,0.5]
+
+def talker():
+    g = JointTrajectory()
+    pub = rospy.Publisher('/ur_driver/joint_speed', JointTrajectory, queue_size=10)
+    rospy.init_node('test_move', anonymous=True,disable_signals=True)
+    g.points=[ JointTrajectoryPoint( positions=joint_pos_new,velocities=Q1,time_from_start=rospy.Duration(d_duration))]
+talker()

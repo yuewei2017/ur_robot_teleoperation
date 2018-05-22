@@ -1,0 +1,8 @@
+prefix=/home/dong/Project/robot_test/devel
+
+Name: rosfalcon
+Description: Description of rosfalcon
+Version: 0.0.0
+Cflags: -I/home/dong/Project/robot_test/devel/include
+Libs: -L/home/dong/Project/robot_test/devel/lib 
+Requires: 

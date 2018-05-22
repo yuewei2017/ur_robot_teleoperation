@@ -1,0 +1,8 @@
+prefix=/home/dong/Project/master/devel
+
+Name: admitance_control
+Description: Description of admitance_control
+Version: 0.0.0
+Cflags: 
+Libs: -L/home/dong/Project/master/devel/lib 
+Requires: 

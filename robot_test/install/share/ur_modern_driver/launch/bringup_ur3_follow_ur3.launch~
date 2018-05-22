@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+
+<!--Two robot ur3 and ur3 launch
+
+  Usage:
+    bringup_ur3_ur3.launch limited:=<value>
+-->
+
+<launch>
+
+  <arg name="limited" default="false"/>
+
+  <!-- robot model -->
+  <param unless="$(arg limited)" name="robot_description" command="$(find xacro)/xacro.py '$(find ur_3_3)/urdf/ur3_ur3_robot.urdf.xacro'" />
+  <param if="$(arg limited)" name="robot_description" command="$(find xacro)/xacro.py '$(find ur_3_3)/urdf/ur3_ur3_limited_robot.urdf.xacro'" />
+
+  <!-- launch the  ur3_1 -->
+  <include file="$(find ur_modern_driver)/launch/ur3_bringup.launch">
+    <arg name="robot_ip" value="192.168.1.101"/>
+    <arg name="port" default="50001"/>
+    <arg name="prefix" default="ur3_1_" />
+    <arg name="limited"  value="$(arg limited)"/>
+  </include>
+
+  <!-- launch the  ur3_2 -->
+  <include file="$(find ur_modern_driver)/launch/ur3_bringup.launch">
+    <arg name="robot_ip" value="192.168.1.102"/>
+    <arg name="port" default="50002"/>
+    <arg name="prefix" default="ur3_2_" />
+    <arg name="limited"  value="$(arg limited)"/>
+  </include>
+
+  <!-- TF Buffer Server -->
+  <node pkg="tf2_ros" type="buffer_server" name="tf2_buffer_server">
+      <param name="buffer_size" value="120.0"/>
+  </node>
+
+  <node name="rviz_ur_3_3" pkg="rviz" type="rviz" args="-d $(find ur_3_3)/config/ur_3_3.rviz"/>
+
+</launch>

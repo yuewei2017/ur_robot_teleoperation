@@ -1,0 +1,8 @@
+prefix=/home/dong/Project/master/devel
+
+Name: haptic_ros_driver
+Description: Description of haptic_ros_driver
+Version: 0.0.0
+Cflags: 
+Libs: -L/home/dong/Project/master/devel/lib 
+Requires: 
