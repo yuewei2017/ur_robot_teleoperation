@@ -1,8 +1,0 @@
-<launch>
-   <node pkg="rviz" type="rviz" name="rviz"/>
-   <node pkg="omega_telemanipulation" type="marker_array_telemanipulation_exe" name="marker_array_telemanipulation"/>
-   <node pkg="omega_telemanipulation" type="collision_engine_omega_telemanipulation_exe" name="collision_engine_omega_telemanipulation"/>
-   <node pkg="omega_telemanipulation" type="omega_engine_telemanipulation_exe" name="omega_engine_telemanipulation"/>
-</launch>
-
-
